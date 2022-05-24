@@ -1,3 +1,4 @@
+name: Trigger jenkins job
 on:
   workflow_call:
     inputs:
@@ -11,16 +12,16 @@ on:
 #         default: 'checkapproval'
         required: true
         type: string
-jobs: 
+     
+jobs:
   trigger-jenkins-with-prinfo:
     runs-on: self-hosted
-
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2 
-      - name: Trigger checkApproval Jenkins Build with PR Information
+        uses: actions/checkout@v2
+      - name: Trigger Jenkins Build with PR Information
         run: |-
-              curl --location --request POST  ${{ secrets.JENKINS_WEB_HOOK }}${{ env.TOKEN }}   \
+              curl --location --request POST  ${{ secrets.JENKINS_WEB_HOOK }}${{ inputs.TOKEN }}   \
                       --header 'Content-Type: application/json' \
                       --data-raw '{
                         "action": ${{ inputs.PR_EVENT }} ,
