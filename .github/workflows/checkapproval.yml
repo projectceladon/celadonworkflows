@@ -1,0 +1,28 @@
+on:
+  workflow_call:
+    inputs:
+      PR_EVENT:
+        required: true
+        type: string
+      PR_URL:
+        required: true
+        type: string
+      TOKEN:
+#         default: 'checkapproval'
+        required: true
+        type: string
+jobs: 
+  trigger-jenkins-with-prinfo:
+    runs-on: self-hosted
+
+    steps:
+      - name: Trigger checkApproval Jenkins Build with PR Information
+        run: |-
+              curl --location --request POST  ${{ secrets.JENKINS_WEB_HOOK }}${{ env.TOKEN }}   \
+                      --header 'Content-Type: application/json' \
+                      --data-raw '{
+                        "action": ${{ inputs.PR_EVENT }} ,
+                        "pull_request": {
+                          "html_url": ${{ inputs.PR_URL }}
+                        }
+                      }'
