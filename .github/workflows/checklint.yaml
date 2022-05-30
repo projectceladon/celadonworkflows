@@ -1,9 +1,9 @@
 name: Lint Repository
 on:
   workflow_call:
-#     secrets:
-#       GITHUB_TOKEN:
-#         required: true
+    secrets:
+      TOKEN_GITHUB:
+        required: true
 jobs:
   Lintingcode:
     runs-on: linter
