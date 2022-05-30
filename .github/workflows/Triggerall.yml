@@ -1,0 +1,72 @@
+name: Trigger all workflows
+on:
+  workflow_call:
+    inputs:
+      PR_EVENT:
+        required: true
+        type: string
+      PR_URL:
+        required: true
+        type: string
+      CHECKAPPROVALTOKEN:
+        default: checkapproval
+        required: false
+        type: string
+      CHECKBUGTOKEN:
+        default: checkapproval
+        required: false
+        type: string
+    secrets:
+      JENKINS_WEB_HOOK:
+        required: true
+      TOKEN_GITHUB:
+        required: true      
+jobs:
+  CheckBug:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: echo vars
+        run: 
+            echo The PR_EVENT is ${{ inputs.PR_EVENT }}
+            echo The PR_URL is ${{ inputs.PR_URL }}
+            echo The TOKEN is ${{ inputs.TOKEN }}
+            
+      - name: Trigger Jenkins Build with PR Information
+        run: |-
+              curl --location --request POST  ${{ secrets.JENKINS_WEB_HOOK }}${{ inputs.CHECKBUGTOKEN }}   \
+                      --header 'Content-Type: application/json' \
+                      --data-raw '{
+                        "action": ${{ inputs.PR_EVENT }} ,
+                        "pull_request": {
+                          "html_url": ${{ inputs.PR_URL }}
+                        }
+                      }'
+  CheckApproval:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: echo vars
+        run: 
+            echo The PR_EVENT is ${{ inputs.PR_EVENT }}
+            echo The PR_URL is ${{ inputs.PR_URL }}
+            echo The TOKEN is ${{ inputs.TOKEN }}
+            
+      - name: Trigger Jenkins Build with PR Information
+        run: |-
+              curl --location --request POST  ${{ secrets.JENKINS_WEB_HOOK }}${{ inputs.CHECKAPPROVALTOKEN }}   \
+                      --header 'Content-Type: application/json' \
+                      --data-raw '{
+                        "action": ${{ inputs.PR_EVENT }} ,
+                        "pull_request": {
+                          "html_url": ${{ inputs.PR_URL }}
+                        }
+                      }'
+  CheckLint:
+    uses: projectceladon/celadonworkflows/.github/workflows/checklint.yaml@main
+    with:
+    secrets: 
+      GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+    
