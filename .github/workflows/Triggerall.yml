@@ -87,10 +87,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
       - name: Comment on failure
         if: ${{ failure() }}
-        uses: github-actions-up-and-running/pr-comment@v1.0.0
+        uses: thollander/actions-comment-pull-request@v1
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          message: Nice PR!👍
+          message: |
+            Lint check failed
+          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
       - name: Delete Existing Label
         uses: actions-ecosystem/action-remove-labels@v1
         with:
