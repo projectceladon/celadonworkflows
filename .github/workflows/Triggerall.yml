@@ -87,10 +87,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
       - name: Comment on failure
         if: ${{ failure() }}
-        uses: alawiii521/current-pr-comment@v1.0
+        uses: github-actions-up-and-running/pr-comment@v1.0.0
         with:
-          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
-          comment: "Linting files failed"
+          repo-token: ${{ secrets.TOKEN_GITHUB }}
+          message: "Linting files failed"
+#         uses: alawiii521/current-pr-comment@v1.0
+#         with:
+#           GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+#           comment: "Linting files failed"
       - name: Delete Existing Label
         uses: actions-ecosystem/action-remove-labels@v1
         with:
