@@ -13,7 +13,7 @@ on:
         required: false
         type: string
       CHECKBUGTOKEN:
-        default: checkapproval
+        default: checkbug
         required: false
         type: string
     secrets:
@@ -31,7 +31,7 @@ jobs:
         run: 
             echo The PR_EVENT is ${{ inputs.PR_EVENT }}
             echo The PR_URL is ${{ inputs.PR_URL }}
-            echo The TOKEN is ${{ inputs.TOKEN }}
+            echo The TOKEN is ${{ inputs.CHECKBUGTOKEN }}
             
       - name: Trigger Jenkins Build with PR Information
         run: |-
@@ -52,7 +52,7 @@ jobs:
         run: 
             echo The PR_EVENT is ${{ inputs.PR_EVENT }}
             echo The PR_URL is ${{ inputs.PR_URL }}
-            echo The TOKEN is ${{ inputs.TOKEN }}
+            echo The TOKEN is ${{ inputs.CHECKAPPROVALTOKEN }}
             
       - name: Trigger Jenkins Build with PR Information
         run: |-
