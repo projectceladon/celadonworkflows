@@ -83,7 +83,7 @@ jobs:
         uses: actions-ecosystem/action-add-labels@v1
         with:
           labels: |
-            lintingfailed
+            Linting failed
           GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
       - name: Comment on failure
         if: ${{ failure() }}
@@ -96,16 +96,19 @@ jobs:
         uses: actions-ecosystem/action-remove-labels@v1
         with:
           github_token: ${{ secrets.TOKEN_GITHUB }}
-          labels: lintingfailed
+          labels: | 
+            Linting failed
+            Linting passed
       - name: Label on Success
         uses: actions-ecosystem/action-add-labels@v1
         with:
-          labels: LintCheckPassed
+          labels: Linting passed
           GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
       - name: Comment on Success
-        uses: alawiii521/current-pr-comment@v1.0
+        uses: thollander/actions-comment-pull-request@v1
         with:
+          message: |
+            Lint check passed
           GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
-          comment: "Lint Check Passed"
 
     
