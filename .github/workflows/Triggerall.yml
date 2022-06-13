@@ -15,12 +15,13 @@ on:
       CHECKBUGTOKEN:
         default: checkbug
         required: false
-        type: string
-    secrets:
-      JENKINS_WEB_HOOK:
-        required: true
-      TOKEN_GITHUB:
-        required: true      
+        type: string    
+      JENKINS_URL:
+        default: https://cbjenkins-ba.devtools.intel.com/teams-satg-aee-android-ci/generic-webhook-trigger/invoke?token=
+        required: false
+        type: string 
+        
+    
 jobs:
   CheckBug:
     runs-on: self-hosted
@@ -35,7 +36,7 @@ jobs:
             
       - name: Trigger Jenkins Build with PR Information
         run: |-
-              curl --location --request POST  ${{ secrets.JENKINS_WEB_HOOK }}${{ inputs.CHECKBUGTOKEN }}   \
+              curl --location --request POST  ${{ inputs.JENKINS_URL }}${{ inputs.CHECKBUGTOKEN }}   \
                       --header 'Content-Type: application/json' \
                       --data-raw '{
                         "action": ${{ inputs.PR_EVENT }} ,
@@ -56,7 +57,7 @@ jobs:
             
       - name: Trigger Jenkins Build with PR Information
         run: |-
-              curl --location --request POST  ${{ secrets.JENKINS_WEB_HOOK }}${{ inputs.CHECKAPPROVALTOKEN }}   \
+              curl --location --request POST  ${{ inputs.JENKINS_URL }}${{ inputs.CHECKAPPROVALTOKEN }}   \
                       --header 'Content-Type: application/json' \
                       --data-raw '{
                         "action": ${{ inputs.PR_EVENT }} ,
@@ -64,51 +65,3 @@ jobs:
                           "html_url": ${{ inputs.PR_URL }}
                         }
                       }'
-  CheckLint:
-    runs-on: linter
-    steps:
-      - name: Clean Workspace
-        uses: AutoModality/action-clean@v1.1.0
-      - name: Checkout repository
-        uses: actions/checkout@v2       
-      - name: Super-Linter
-        id: linting
-        uses: github/super-linter@v4.9.4
-        env:      
-          DEFAULT_BRANCH: master
-          VALIDATE_ALL_CODEBASE: false
-          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
-      - name: Label on failure
-        if: ${{ failure() }}
-        uses: actions-ecosystem/action-add-labels@v1
-        with:
-          labels: |
-            Linting failed
-          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
-      - name: Comment on failure
-        if: ${{ failure() }}
-        uses: thollander/actions-comment-pull-request@v1
-        with:
-          message: |
-            Lint check failed
-          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
-      - name: Delete Existing Label
-        uses: actions-ecosystem/action-remove-labels@v1
-        with:
-          github_token: ${{ secrets.TOKEN_GITHUB }}
-          labels: | 
-            Linting failed
-            Linting passed
-      - name: Label on Success
-        uses: actions-ecosystem/action-add-labels@v1
-        with:
-          labels: Linting passed
-          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
-      - name: Comment on Success
-        uses: thollander/actions-comment-pull-request@v1
-        with:
-          message: |
-            Lint check passed
-          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
-
-    
