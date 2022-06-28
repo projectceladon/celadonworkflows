@@ -8,6 +8,9 @@ on:
       PR_URL:
         required: true
         type: string
+      PR_LABEL:
+        required: true
+        type: string
       CHECKAPPROVALTOKEN:
         default: checkapproval
         required: false
@@ -19,7 +22,9 @@ on:
       JENKINS_URL:
         default: https://cbjenkins-ba.devtools.intel.com/teams-satg-aee-android-ci/generic-webhook-trigger/invoke?token=
         required: false
-        type: string 
+        type: string
+	
+	
         
     
 jobs:
@@ -53,7 +58,8 @@ jobs:
         run: 
             echo The PR_EVENT is ${{ inputs.PR_EVENT }}
             echo The PR_URL is ${{ inputs.PR_URL }}
-            echo The TOKEN is ${{ inputs.CHECKAPPROVALTOKEN }}
+            echo The LABEL is ${{ inputs.PR_LABEL }}
+			
             
       - name: Trigger Jenkins Build with PR Information
         run: |-
@@ -63,5 +69,8 @@ jobs:
                         "action": ${{ inputs.PR_EVENT }} ,
                         "pull_request": {
                           "html_url": ${{ inputs.PR_URL }}
+                        }
+                        "label": {
+                          "name": ${{ inputs.PR_LABEL }}
                         }
                       }'
