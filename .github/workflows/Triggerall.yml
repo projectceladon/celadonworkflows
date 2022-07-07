@@ -59,7 +59,7 @@ jobs:
             echo The LABEL is ${{ inputs.PR_LABEL }}           
       - name: Trigger Jenkins Build with PR Information
         run: |-
-              curl--location--request POST 'https://cbjenkins-ba.devtools.intel.com/teams-satg-aee-android-ci/generic-webhook-trigger/invoke?token=checkapproval_test&action=labeled&pull_request_url=https://github.com/intel-sandbox/shahbaz-moja-public/pull/24&pr_label=Valid%20commit%20message' \
+              curl --location --request POST 'https://cbjenkins-ba.devtools.intel.com/teams-satg-aee-android-ci/generic-webhook-trigger/invoke?token=checkapproval_test&action=labeled&pull_request_url=https://github.com/intel-sandbox/shahbaz-moja-public/pull/24&pr_label=Valid%20commit%20message' \
               --header 'Accept: application/vnd.github.v3+json' \
               --header 'Content-Type: application/json' \
               --data - raw '{
