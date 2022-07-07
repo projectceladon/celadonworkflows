@@ -61,7 +61,7 @@ jobs:
         if: ${{ inputs.PR_LABEL == 'Valid commit message' }} 
         run: |- 
 
-               curl --location --request POST  ${{ inputs.JENKINS_URL }}${{ inputs.CHECKBUGTOKEN }}   \
+               curl --location --request POST  ${{ inputs.JENKINS_URL }}${{ inputs.CHECKAPPROVALTOKEN }}   \
                       --header 'Content-Type: application/json' \
                       --data-raw '{
                         "action": ${{ inputs.PR_EVENT }} ,
@@ -74,8 +74,9 @@ jobs:
                       }'
                       
       - name: Trigger Jenkins Build with PR Information if label is None
+        if: ${{ inputs.PR_LABEL != 'Valid commit message' }} 
         run: |- 
-               curl --location --request POST  ${{ inputs.JENKINS_URL }}${{ inputs.CHECKBUGTOKEN }}   \
+               curl --location --request POST  ${{ inputs.JENKINS_URL }}${{ inputs.CHECKAPPROVALTOKEN }}   \
                       --header 'Content-Type: application/json' \
                       --data-raw '{
                         "action": ${{ inputs.PR_EVENT }} ,
