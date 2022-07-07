@@ -56,10 +56,10 @@ jobs:
             echo The PR_EVENT is ${{ inputs.PR_EVENT }}
             echo The PR_URL is ${{ inputs.PR_URL }}
             echo The LABEL is ${{ inputs.PR_LABEL }}           
-      - name: Trigger Jenkins Build with PR Information
+      - name: Trigger Jenkins Build with PR Information if label is present
+        if: ${{ inputs.PR_LABEL == 'Valid commit message' }} 
         run: |- 
-              if [[ inputs.PR_LABEL  == "Valid commit message" ]]; 
-              then
+
                curl --location --request POST  ${{ inputs.JENKINS_URL }}${{ inputs.CHECKBUGTOKEN }}   \
                       --header 'Content-Type: application/json' \
                       --data-raw '{
@@ -71,8 +71,10 @@ jobs:
                           "name": ${{ inputs.PR_LABEL }}
                         }                        
                       }'
-              else:
-                        curl --location --request POST  ${{ inputs.JENKINS_URL }}${{ inputs.CHECKBUGTOKEN }}   \
+      - name: Trigger Jenkins Build with PR Information without label
+        run: |- 
+
+               curl --location --request POST  ${{ inputs.JENKINS_URL }}${{ inputs.CHECKBUGTOKEN }}   \
                       --header 'Content-Type: application/json' \
                       --data-raw '{
                         "action": ${{ inputs.PR_EVENT }} ,
@@ -80,7 +82,6 @@ jobs:
                           "html_url": ${{ inputs.PR_URL }}
                         }                     
                       }'
-              fi
               
 
       
