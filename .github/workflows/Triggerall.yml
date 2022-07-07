@@ -9,8 +9,10 @@ on:
         required: true
         type: string
       PR_LABEL:
-        required: true
+        required: false
         type: string
+        default: Test
+        
       CHECKAPPROVALTOKEN:
         default: checkapproval
         required: false
