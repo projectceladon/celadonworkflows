@@ -58,7 +58,7 @@ jobs:
             echo The LABEL is ${{ inputs.PR_LABEL }}           
       - name: Trigger Jenkins Build with PR Information
         run: |- 
-              if [[ "${{ inputs.PR_LABEL }}"  == "Valid commit message" ]]; 
+              if [[ `${{ inputs.PR_LABEL }}`  == "Valid commit message" ]]; 
               then
                curl --location --request POST  ${{ inputs.JENKINS_URL }}${{ inputs.CHECKBUGTOKEN }}   \
                       --header 'Content-Type: application/json' \
