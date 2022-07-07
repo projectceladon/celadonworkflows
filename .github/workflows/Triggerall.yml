@@ -9,9 +9,8 @@ on:
         required: true
         type: string
       PR_LABEL:
-        required: false
+        required: true
         type: string
-        default: Test
         
       CHECKAPPROVALTOKEN:
         default: checkapproval
@@ -56,10 +55,13 @@ jobs:
         run: 
             echo The PR_EVENT is ${{ inputs.PR_EVENT }}
             echo The PR_URL is ${{ inputs.PR_URL }}
-            echo The LABEL is ${{ inputs.PR_LABEL }}           
-      - name: Trigger Jenkins Build with PR Information
-        run: |-
-              curl --location --request POST  ${{ inputs.JENKINS_URL }}${{ inputs.CHECKBUGTOKEN }}   \
+            echo The LABEL is ${{ inputs.PR_LABEL }}
+            
+      - name: Trigger Jenkins Build with PR Information if label is Valid commit message
+        if: ${{ inputs.PR_LABEL == 'Valid commit message' }} 
+        run: |- 
+
+               curl --location --request POST  ${{ inputs.JENKINS_URL }}${{ inputs.CHECKBUGTOKEN }}   \
                       --header 'Content-Type: application/json' \
                       --data-raw '{
                         "action": ${{ inputs.PR_EVENT }} ,
@@ -70,4 +72,19 @@ jobs:
                           "name": ${{ inputs.PR_LABEL }}
                         }                        
                       }'
+                      
+      - name: Trigger Jenkins Build with PR Information if label is None
+        run: |- 
+               curl --location --request POST  ${{ inputs.JENKINS_URL }}${{ inputs.CHECKBUGTOKEN }}   \
+                      --header 'Content-Type: application/json' \
+                      --data-raw '{
+                        "action": ${{ inputs.PR_EVENT }} ,
+                        "pull_request": {
+                          "html_url": ${{ inputs.PR_URL }}
+                        }                     
+                      }'
+              
+
+      
+              
               
