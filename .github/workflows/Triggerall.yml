@@ -11,7 +11,9 @@ on:
       PR_LABEL:
         required: true
         type: string
-        
+      EVENT:
+        required: true
+        type: string         
       CHECKAPPROVALTOKEN:
         default: checkapproval
         required: false
@@ -84,7 +86,18 @@ jobs:
                           "html_url": ${{ inputs.PR_URL }}
                         }                     
                       }'
-              
+
+  TriggerBuild:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2            
+      - name: TriggerBuild with Event
+        run: |-
+              curl --location --request POST  'http://android-ci.iglb.intel.com:32462/eventpublisher/api/publish'  \
+                      --header 'Content-Type: application/json' \
+                      --header 'x-github-event: abcedf' \
+                      --data-raw ${{ inputs.EVENT }}
 
       
               
