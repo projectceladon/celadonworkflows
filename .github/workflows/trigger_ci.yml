@@ -1,16 +1,7 @@
-name: Trigger all workflows
+name: Trigger CI Tasks 
 on:
   workflow_call:
     inputs:
-      PR_EVENT:
-        required: true
-        type: string
-      PR_URL:
-        required: true
-        type: string
-      PR_LABEL:
-        required: true
-        type: string    
       EVENT:
         required: true
         type: string         
