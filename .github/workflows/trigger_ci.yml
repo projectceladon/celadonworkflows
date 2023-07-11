@@ -13,8 +13,7 @@ jobs:
         uses: actions/checkout@v2         
       - name: Dump JSON to File
         run: |
-          escaped_event=$(echo "${{ inputs.EVENT }}" | sed "s/'/\\\'/g")
-          echo "$escaped_event" > event.json
+          echo "${{ inputs.EVENT }}" | sed "s/'/\\\'/g" > event.json
 
         
 #       - name: TriggerBuild with Event
