@@ -12,7 +12,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2        
       - name: List Directory Contents
-        run: ls -al
+        run: ls -al ${{ github.workspace }}
 #       - name: Execute Python Script
 #         run: python .github/workflows/scripts/test.py
 
