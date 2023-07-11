@@ -10,7 +10,12 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2        
+        uses: actions/checkout@v2   
+      - name: Checkout Reusable Workflow Repository
+        uses: actions/checkout@v2
+        with:
+          repository: projectceladon/celadonworkflows
+          ref: v1.1        
       - name: List Directory Contents
         run: ls -al ${{ github.workspace }}
 #       - name: Execute Python Script
