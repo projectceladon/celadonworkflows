@@ -12,7 +12,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2         
       - name: Dump JSON to File
-        run: echo '${{ inputs.EVENT }}}' > event.json
+        run: echo "${{ inputs.EVENT }}}" > event.json
         
 #       - name: TriggerBuild with Event
 #         run: |-
