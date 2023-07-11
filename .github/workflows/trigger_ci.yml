@@ -16,7 +16,7 @@ jobs:
               curl --location --request POST  'https://api-gw.dart.intel.com:32462/eventpublisher/api/publish'  \
                       --header 'Content-Type: application/json' \
                       --header 'x-github-event: abcedf' \
-                      --data-raw '${{ inputs.EVENT }}'
+                      --data "@${{ github.event_path }}" 
 
       
               
