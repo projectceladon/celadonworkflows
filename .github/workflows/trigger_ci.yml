@@ -4,33 +4,32 @@ on:
     inputs:
       EVENT:
         required: true
-        type: string         
+        type: string   
 jobs:
   TriggerBuild:
     runs-on: self-hosted
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2   
-      - name: Checkout Reusable Workflow Repository
-        uses: actions/checkout@v2
-        with:
-          repository: projectceladon/celadonworkflows
-          ref: v1.1        
-      - name: List Directory Contents
-        run: ls -al ${{ github.workspace }}
-      - name: Set File Execute Permissions
-        run: chmod +x .github/workflows/scripts/test.py
-      - name: Execute Python Script
-        run: python .github/workflows/scripts/test.py
-
+      # - name: Checkout Reusable Workflow Repository
+      #   uses: actions/checkout@v2
+      #   with:
+      #     repository: projectceladon/celadonworkflows
+      #     ref: v1.1        
+      # - name: List Directory Contents
+      #   run: ls -al ${{ github.workspace }}
+      # - name: Set File Execute Permissions
+      #   run: chmod +x .github/workflows/scripts/test.py
+      # - name: Execute Python Script
+      #   run: python .github/workflows/scripts/test.py
 
         
-#       - name: TriggerBuild with Event
-#         run: |-
-#               curl --location --request POST  'https://api-gw.dart.intel.com:32462/eventpublisher/api/publish'  \
-#                       --header 'Content-Type: application/json' \
-#                       --header 'x-github-event: abcedf' \
-#                       --data-urlencode '${{ inputs.EVENT }}'
+      - name: TriggerBuild with Event
+        run: |-
+              curl --location --request POST  'https://api-gw.dart.intel.com:32462/eventpublisher/api/publish'  \
+                      --header 'Content-Type: application/json' \
+                      --header 'x-github-event: abcedf' \
+                      --data "@${{ github.event_path }}" 
 
       
               
