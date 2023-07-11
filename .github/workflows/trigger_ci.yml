@@ -1,4 +1,4 @@
-name: Trigger CI Tasks 
+name: test
 on:
   workflow_call:
     inputs:
@@ -12,7 +12,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2         
       - name: Dump JSON to File
-        run: echo "${{ inputs.EVENT }}}" > event.json
+        run: |
+          escaped_event=$(echo "${{ inputs.EVENT }}" | sed "s/'/\\\'/g")
+          echo "$escaped_event" > event.json
+
         
 #       - name: TriggerBuild with Event
 #         run: |-
