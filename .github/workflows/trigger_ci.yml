@@ -18,8 +18,10 @@ jobs:
           ref: v1.1        
       - name: List Directory Contents
         run: ls -al ${{ github.workspace }}
-#       - name: Execute Python Script
-#         run: python .github/workflows/scripts/test.py
+      - name: Set File Execute Permissions
+        run: chmod +x .github/workflows/scripts/test.py
+      - name: Execute Python Script
+        run: python .github/workflows/scripts/test.py
 
 
         
