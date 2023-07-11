@@ -11,9 +11,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2         
-      - name: Dump JSON to File
-        run: |
-          echo "${{ inputs.EVENT }}" | sed "s/'/\\\'/g" > event.json
+      - name: Execute Python Script
+        run: python .github/workflows/scripts/test.py
+
 
         
 #       - name: TriggerBuild with Event
