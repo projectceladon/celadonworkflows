@@ -1,22 +1,19 @@
 name: Trigger CI Tasks 
 on:
-  workflow_call:
-    inputs:
-      EVENT:
-        required: true
-        type: string         
+  pull_request:
+    types: "**"
+    branches: "**"
+
 jobs:
   TriggerBuild:
-    runs-on: self-hosted
+    runs-on: test
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2            
-      - name: TriggerBuild with Event
-        run: |-
-              curl --location --request POST  'https://api-gw.dart.intel.com:32462/eventpublisher/api/publish'  \
-                      --header 'Content-Type: application/json' \
-                      --header 'x-github-event: abcedf' \
-                      --data "@${{ github.event_path }}" 
+    - name: Dump GitHub context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: |
+        echo "$GITHUB_CONTEXT"
+
 
       
               
