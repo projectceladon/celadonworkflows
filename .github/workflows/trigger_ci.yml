@@ -8,6 +8,8 @@ jobs:
   TriggerBuild:
     runs-on: test
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2 
     - name: Dump GitHub context
       env:
         GITHUB_CONTEXT: ${{ toJson(github) }}
