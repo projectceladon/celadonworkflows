@@ -1,4 +1,5 @@
 name: Trigger CI Tasks 
+permissions: read-all
 on:
   workflow_call:
     inputs:
