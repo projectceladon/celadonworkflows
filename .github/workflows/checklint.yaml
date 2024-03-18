@@ -4,6 +4,7 @@ on:
     secrets:
       TOKEN_GITHUB:
         required: true
+permissions: read-all
 jobs:
   Lintingcode:
     runs-on: linter

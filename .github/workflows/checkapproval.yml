@@ -15,7 +15,7 @@ on:
     secrets:
       JENKINS_WEB_HOOK:
         required: true
-     
+permissions: read-all   
 jobs:
   trigger-jenkins-with-prinfo:
     runs-on: self-hosted
