@@ -14,7 +14,8 @@ on:
         type: string
     secrets:
       JENKINS_WEB_HOOK:
-        required: true    
+        required: true  
+permissions: read-all  
 jobs:
   CheckBug:
     runs-on: self-hosted

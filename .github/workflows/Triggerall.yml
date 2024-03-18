@@ -24,6 +24,7 @@ on:
         default: https://cbjenkins-ba.devtools.intel.com/teams-satg-aee-android-ci/generic-webhook-trigger/invoke?token=
         required: false
         type: string   
+permissions: read-all
 jobs:
   CheckBug:
     runs-on: self-hosted
