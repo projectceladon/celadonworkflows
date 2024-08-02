@@ -12,17 +12,17 @@ jobs:
   run_actual_actions:
     runs-on: ubuntu-latest
     steps:
-      - name: Deserialize Event Payload
-        id: deserialize-event
-        run: |
-          echo "Deserializing event payload..."
-          FULL_EVENT_PAYLOAD="${{ github.event.inputs.full_event_payload }}"
-          echo "event_payload=$(echo ${FULL_EVENT_PAYLOAD} | jq -R -r @uri | jq .)" >> $GITHUB_ENV
+      # - name: Deserialize Event Payload
+      #   id: deserialize-event
+      #   run: |
+      #     echo "Deserializing event payload..."
+      #     FULL_EVENT_PAYLOAD="${{ github.event.inputs.full_event_payload }}"
+      #     echo "event_payload=$(echo ${FULL_EVENT_PAYLOAD} | jq -R -r @uri | jq .)" >> $GITHUB_ENV
 
       - name: Run actions
         run: |
           echo "Running actions with the full event payload..."
           # Access the event payload and perform necessary actions
-          PR_NUMBER=$(echo $event_payload | jq -r '.payload.pull_request.number')
-          echo "PR_NUMBER=${PR_NUMBER}"
+          PR="${{ github.event.inputs.full_event_payload }}"
+          echo "PR=${PR}"
           # Add additional actions here
