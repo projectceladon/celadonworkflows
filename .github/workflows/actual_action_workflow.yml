@@ -1,29 +1,28 @@
 name: Actual Action Workflow
 
 on:
-  repository_dispatch:
-    types: [trigger-workflow]
+  workflow_dispatch:
+    inputs:
+      full_event_payload:
+        description: 'The full event payload'
+        required: true
+        type: string
 
 jobs:
   run_actual_actions:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Retrieve PR Info
-        id: get-pr-info
+      - name: Deserialize Event Payload
+        id: deserialize-event
         run: |
-          echo "Retrieving PR information..."
-          PR_ID=$(jq -r '.client_payload.pull_request_id' < "$GITHUB_EVENT_PATH")
-          PR_NUMBER=$(jq -r '.client_payload.pull_request_number' < "$GITHUB_EVENT_PATH")
-          SOURCE_REPO=$(jq -r '.client_payload.repository' < "$GITHUB_EVENT_PATH")
-          echo "PR_ID=${PR_ID}"
-          echo "PR_NUMBER=${PR_NUMBER}"
-          echo "SOURCE_REPO=${SOURCE_REPO}"
-          # Add logic here to retrieve additional PR information if needed
+          echo "Deserializing event payload..."
+          FULL_EVENT_PAYLOAD="${{ github.event.inputs.full_event_payload }}"
+          echo "event_payload=$(echo ${FULL_EVENT_PAYLOAD} | jq -R -r @uri | jq .)" >> $GITHUB_ENV
 
       - name: Run actions
         run: |
-          echo "Running actions for PR ID: ${{ steps.get-pr-info.outputs.PR_ID }}"
-          # Add your actions here
+          echo "Running actions with the full event payload..."
+          # Access the event payload and perform necessary actions
+          PR_NUMBER=$(echo $event_payload | jq -r '.payload.pull_request.number')
+          echo "PR_NUMBER=${PR_NUMBER}"
+          # Add additional actions here
