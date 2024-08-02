@@ -7,16 +7,41 @@ on:
         type: string         
 jobs:
   TriggerBuild:
-    runs-on: self-hosted
+    runs-on: ubuntu
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2            
+      - name: Get Token
+        run: |
+          RESPONSE=$(curl --location 'https://apis-sandbox.intel.com/v1/auth/token' \
+                      --header 'Content-Type: application/x-www-form-urlencoded' \
+                      --data-urlencode 'client_id=${{ secrets.CLIENT_ID }}'\
+                      --data-urlencode 'client_secret=${{ secrets.CLIENT_SECRET }}' \
+                      --data-urlencode 'grant_type=client_credentials')
+
+          TOKEN=$(echo "$RESPONSE" | jq -r '.access_token')
+          if [ -z "$TOKEN" ]; then
+              echo "Error: Failed to retrieve access token"
+              exit 1
+          fi
+          echo "TOKEN=$TOKEN" >> $GITHUB_ENV
+
       - name: TriggerBuild with Event
+        if: success()
+        env:
+          TOKEN: ${{ env.TOKEN }}
         run: |-
-              curl --location --request POST  'https://ci-events.dart.intel.com:32462/eventpublisher/api/publish'  \
+              EVENT_DATA="@${{ github.event_path }}"
+              retries=3
+              while [ $retries -gt 0 ]; do
+                  if curl --location --request POST 'https://apis-sandbox.intel.com/androidcieventpublisher/v1/publish' \
                       --header 'Content-Type: application/json' \
-                      --header 'x-github-event: abcedf' \
-                      --data "@${{ github.event_path }}" 
+                      --header 'x-jenkins-event: jenkins' \
+                      --header "Authorization: Bearer $TOKEN" \
+                      --data "$EVENT_DATA"; then
+                      break
+                  fi
+                  retries=$((retries-1))
+                  sleep 1
+              done
 
       
               
